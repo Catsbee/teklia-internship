@@ -1,5 +1,11 @@
 # Comment executer le projet
 
+## Prérequis
+Pour utiliser mon projet, installer les dépendances via la commande suivante :
+```bash
+pip install -r requirements.txt
+```
+
 ## Création du script d'entrainement du modèle
 ```bash
 python parser.py
@@ -16,3 +22,4 @@ Pour tester le modèle, lancer la commande suivante :
 ```bash
 python script_python_command.py test LeMonde2003_9classes.csv sav t_sav
 ```
+
