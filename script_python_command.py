@@ -1,26 +1,31 @@
 # library importation
-import sys
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+import argparse
 import joblib
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--command', type=str, required=True, choices=["train","test"], help="either train or test")
+parser.add_argument('--data', type=str, required=True)
+parser.add_argument('--output', type=str, required=True)
+parser.add_argument('--model', type=str, required=False)
+
+args = parser.parse_args()
+
 # take into account arguments when launching the script
-arg = sys.argv
-if len(arg) < 2:
-    print("Wrong number of arguments")
-else:
-    # Script for the train command
-    if arg[1] == "train":
-        #1 for script_python_command.py, 1 for test, 1 for test set, 1 for saving path
-        if len(arg) != 4:
-            print("Unexpected number of argument for train")
-        else:
-            training_set = arg[2]
-            saving_path = arg[3]
+
+
+# Script for the train command
+if args.command == 'train':
+    #1 for script_python_command.py, 1 for test, 1 for test set, 1 for saving path
+
+
+            training_set = args.data
+            saving_path = args.output
             df_train = pd.read_csv(training_set)
             df_train_hyper, df_dev = train_test_split(df_train, test_size=0.25, random_state=42)
 
@@ -58,14 +63,14 @@ else:
 
             #For testing in command :
             #python script_python_command.py train LeMonde2003_9classes.csv sav
-    elif arg[1] == "test":
+elif args.command == "test":
         #1 for script_python_command.py, 1 for for train,
-        if len(arg) != 5:
-            print("Unexpected number of argument for test")
-        else:
-            testing_set = arg[2]
-            model = arg[3]
-            pred = arg[4]
+          if args.model == None :
+            print('Model argument mendatory for test command')
+          else:
+            testing_set = args.data
+            model = args.model
+            pred = args.output
             df_test = pd.read_csv(testing_set)
 
             X_test = df_test.text
@@ -88,7 +93,6 @@ else:
             f = open(pred, "w")
             f.writelines('\n'.join(clf2.predict(X_test_counts)))
             f.close()
-    else:
-        print("Command not recognised")
 
-print(arg)
+
+
